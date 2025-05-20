@@ -1,5 +1,6 @@
 import './globals.css';
 import { ReduxProvider } from '@/providers/ReduxProvider';
+import { Toaster } from 'sonner';
 
 export default function RootLayout({
   children,
@@ -10,6 +11,7 @@ export default function RootLayout({
     <html lang="en">
       <ReduxProvider>
         <body>
+          <Toaster richColors position="top-center" />
           { children }
         </body>
       </ReduxProvider>
