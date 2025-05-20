@@ -8,9 +8,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <ReduxProvider>
-        <body>
+        <body className="h-full overflow-hidden">
           <Toaster richColors position="top-center" />
           { children }
         </body>
