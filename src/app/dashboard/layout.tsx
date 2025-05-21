@@ -1,9 +1,15 @@
-import type {  ReactNode } from 'react';
+'use client';
+
 import Sidebar from '@/components/ui/Sidebar';
 import Header from '@/components/ui/Header';
+import Modal from "@/components/ui/Modal"
 
-const DashboardLayout = ({ children }: { children: ReactNode }) => {
-    return(
+export default function DashboardLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+    return (
         <main className="flex min-h-screen w-full justify-center overflow-hidden">
             {/* Sidebar */}
             <Sidebar />
@@ -11,10 +17,10 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
                 {/* Header */}
                 <Header />
                 {/* Main */}
-            { children }
+                {children}
             </section>
+            {/* Modal */}
+            <Modal />
         </main>
     )
 }
-
-export default DashboardLayout;

@@ -1,12 +1,22 @@
 'use client';
 import Link from "next/link"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { RootState } from "@/store"
 import Image from "next/image"
+import { openModal } from "@/store/slices/modalSlice"
+import { logout } from "@/store/slices/authSlice"
 
 export default function Sidebar() {
-
+    const dispatch = useDispatch();
     const { isSidebarOpen } = useSelector((state: RootState) => state.ui);
+
+    const handleLogoutClick = () => {
+        dispatch(openModal({
+            title: "Confirm Logout",
+            message: "Are you sure you want to logout?",
+            onConfirm: () => dispatch(logout())
+        }));
+    };
 
     return(
         <aside 
@@ -96,9 +106,7 @@ export default function Sidebar() {
                             background: 'none',
                             cursor: 'pointer',
                         }}
-                        onClick={() => {
-                            console.log('Logout');
-                        }}
+                        onClick={handleLogoutClick}
                     >
                         <Image 
                             src="/logout.svg"
@@ -107,7 +115,17 @@ export default function Sidebar() {
                             height={ 40 }
                             className="transition-all duration-300"
                         />
-
+                        <p 
+                            style={{
+                                color: '#ffffff',
+                                fontWeight: 'bold',
+                                textDecoration: 'none !important',
+                                textUnderlineOffset: 'none',
+                                display: !isSidebarOpen ? 'block' : 'none',
+                            }}
+                        >
+                            Logout
+                        </p>
                     </button>
                 </section>
             </div>
