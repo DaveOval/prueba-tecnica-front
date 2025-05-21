@@ -15,6 +15,8 @@ const customStyles: ReactModal.Styles = {
         zIndex: 9999
     },
     content: {
+        backgroundColor: '#19191B',
+        border: '1px solid #27272A',
         position: 'absolute',
         top: '50%',
         left: '50%',
@@ -66,13 +68,31 @@ export default function Modal() {
                 <div className="flex justify-end gap-4">
                     <button
                         onClick={() => dispatch(closeModal())}
-                        className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+                        style={{
+                            backgroundColor: '#19191B',
+                            color: '#ededee',
+                            borderRadius: '0.5rem',
+                            padding: '0.5rem 1rem',
+                            border: '1px solid #27272A',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                        }}
+                        className="hover:bg-[#27272A]"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleConfirm}
-                        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                        style={{
+                            backgroundColor: '#5472E4',
+                            color: '#ededee',
+                            borderRadius: '0.5rem',
+                            padding: '0.5rem 1rem',
+                            border: '1px solid #27272A',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease',
+                        }}
+                        className="hover:bg-[#4A63C7]"
                     >
                         Confirm
                     </button>
