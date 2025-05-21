@@ -1,8 +1,14 @@
 'use client'
 
+import DropZone from "@/components/ui/DropZone";
+
+
+
 const DashboardHome = () => {
   return (
-    <div>page</div>
+    <main>
+        <DropZone />
+    </main>
   )
 }
 
