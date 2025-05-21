@@ -32,9 +32,19 @@ export default function Header() {
             >
                 {
                     isSidebarOpen ? (
-                        <Image src="/menu.svg" alt="menu" width={30} height={30} />
+                        <Image 
+                            src="/menu.svg" 
+                            alt="menu" 
+                            width={30} 
+                            height={30}  
+                        />
                     ) : (
-                        <Image src="/close.svg" alt="menu" width={30} height={30} />
+                        <Image 
+                            src="/close.svg" 
+                            alt="menu" 
+                            width={30} 
+                            height={30} 
+                        />
                     )
                 }
             </button>
@@ -45,13 +55,21 @@ export default function Header() {
                     gap: '10px',
                 }}
             >
-                <p>
+                <p 
+                    className="flex items-center justify-center"
+                    style={{
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                        color: '#5472E4',
+                        gap: '5px',
+                    }}
+                >
                     <span 
                     style={{
                         color: '#ffffff',
                         fontWeight: 'bold',
                     }}>Welcome</span> 
-                    {user?.first_name} {user?.last_name} 
+                    {user?.name}
                 </p>
                 <Image 
                     src="/user.svg" 

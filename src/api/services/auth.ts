@@ -1,14 +1,16 @@
 import apiClient from "../client";
-import { store } from "@/store";
 
-
+// LoginFormData interface
 interface LoginResponse {
+  message: string;
+  user: {
     id: string;
     email: string;
-    first_name: string;
+    name: string;
     last_name: string;
     role: string;
     token: string;
+  }
 }
 
 interface LoginRequest {
@@ -16,29 +18,32 @@ interface LoginRequest {
     password: string;
 }
 
-// Request interceptor
-apiClient.interceptors.request.use(
-  (config) => {
-    if (config.url?.includes('/auth/')) {
-      return config;
-    }
+// RegisterFormData interface
+interface RegisterResponse {
+  id: string;
+  name: string;
+  last_name: string;
+  email: string;
+}
 
-    const state = store.getState();
-    const token = state.auth?.user?.token;
+interface RegisterRequest {
+  name: string;
+  last_name: string;
+  email: string;
+  password: string;
+}
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
 export const authService = {
-    login: async (data: LoginRequest) => {
-      const response = await apiClient.post<LoginResponse>('/auth/login', data);
-      return response.data;
-    },
-  };
+  login: async (data: LoginRequest) => {
+    const response = await apiClient.post<LoginResponse>('/auth/login', data);
+    return response.data;
+  },
+};
+
+export const registerService = {
+  register: async (data: RegisterRequest) => {
+    const response = await apiClient.post<RegisterResponse>('/auth/register', data);
+    return response.data;
+  }
+}

@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useDispatch } from 'react-redux';
+import Link from 'next/link';
 
 import { LoginFormData } from '@/types/auth';
 import AuthInput from '@/components/ui/AuthInput';
 import AuthButton from '@/components/ui/AuthButton';
-import Link from 'next/link';
 import { login } from '@/store/slices/authSlice';
 import { authService } from '@/api/services/auth';
 import PublicRoute from '@/components/auth/PublicRoute';
@@ -23,7 +23,7 @@ const Login = () => {
       try {
         const response = await authService.login(data);
         if (response) {
-          dispatch(login(response));
+          dispatch(login(response.user));
           toast.success('Login successful');
           router.replace('/dashboard');
         }

@@ -15,7 +15,11 @@ const Register = () => {
     const { isAuthenticated } = useAuth();
     const router = useRouter();
 
-    const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>();
+    const { register, handleSubmit, formState: { errors }, watch } = useForm<RegisterFormData>({
+        mode: 'onChange'
+    });
+
+    const password = watch('password');
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -25,7 +29,10 @@ const Register = () => {
 
     const onSubmit = (data: RegisterFormData) => {
         toast.success('Registration successful');
-        console.log(data);
+        /* try {
+            
+        } */
+       console.log(data);
     }
 
     return (
@@ -55,6 +62,20 @@ const Register = () => {
                     error={errors.name?.message}
                     isRequired
                 />
+                <AuthInput
+                    placeholder="Enter your last name"
+                    label="Last Name"
+                    type="text"
+                    {...register('lastName', {
+                        required: 'Last name is required',
+                        minLength: {
+                            value: 2,
+                            message: 'Last name must be at least 2 characters',
+                        },
+                    })}
+                    error={errors.lastName?.message}
+                    isRequired
+                />
 
                 <AuthInput
                     placeholder="Enter your email"
@@ -81,6 +102,20 @@ const Register = () => {
                             value: 6,
                             message: 'Minimum 6 characters',
                         },
+                        maxLength: {
+                            value: 20,
+                            message: 'Maximum 20 characters',
+                        },
+                        validate: (value) => {
+                            if (!value) return true;
+                            if (value.length < 6) return 'Password must be at least 6 characters';
+                            if (value.length > 20) return 'Password must be at most 20 characters';
+                            if (!/[!@#$%^&*]/.test(value)) return 'Password must contain at least one special character';
+                            if (!/[A-Z]/.test(value)) return 'Password must contain at least one uppercase letter';
+                            if (!/[a-z]/.test(value)) return 'Password must contain at least one lowercase letter';
+                            if (!/[0-9]/.test(value)) return 'Password must contain at least one number';
+                            return true;
+                        }
                     })}
                     error={errors.password?.message}
                     isRequired
@@ -92,8 +127,11 @@ const Register = () => {
                     type="password"
                     {...register('confirmPassword', {
                         required: 'Please confirm your password',
-                        validate: (value, formValues) => 
-                            value === formValues.password || 'Passwords do not match',
+                        validate: (value) => {
+                            if (!value) return true;
+                            if (value !== password) return 'Passwords do not match';
+                            return true;
+                        }
                     })}
                     error={errors.confirmPassword?.message}
                     isRequired

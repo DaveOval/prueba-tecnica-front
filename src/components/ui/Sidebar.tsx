@@ -5,16 +5,23 @@ import { RootState } from "@/store"
 import Image from "next/image"
 import { openModal } from "@/store/slices/modalSlice"
 import { logout } from "@/store/slices/authSlice"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner";
 
 export default function Sidebar() {
     const dispatch = useDispatch();
+    const router = useRouter();
     const { isSidebarOpen } = useSelector((state: RootState) => state.ui);
 
     const handleLogoutClick = () => {
         dispatch(openModal({
             title: "Confirm Logout",
             message: "Are you sure you want to logout?",
-            onConfirm: () => dispatch(logout())
+            onConfirm: () => {
+                dispatch(logout());
+                router.push('/auth/login');
+                toast.success("Logged out successfully");
+            }
         }));
     };
 
