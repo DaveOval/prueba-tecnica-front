@@ -10,6 +10,15 @@ import { useAuth } from '@/hooks/useAuth';
 import AuthInput from '@/components/ui/AuthInput';
 import { toast } from 'sonner';
 import AuthButton from '@/components/ui/AuthButton';
+import { registerService } from '@/api/services/auth';
+
+interface ApiError extends Error {
+    response: {
+        data: {
+            detail: string;
+        }
+    }
+}
 
 const Register = () => {
     const { isAuthenticated } = useAuth();
@@ -19,6 +28,7 @@ const Register = () => {
         mode: 'onChange'
     });
 
+
     const password = watch('password');
 
     useEffect(() => {
@@ -27,12 +37,24 @@ const Register = () => {
         }
     }, [isAuthenticated, router]);
 
-    const onSubmit = (data: RegisterFormData) => {
-        toast.success('Registration successful');
-        /* try {
-            
-        } */
-       console.log(data);
+    const onSubmit = async (data: RegisterFormData) => {
+        try {
+            const response = await registerService.register({
+                ...data,
+                last_name: data.lastName
+            });
+            if (response) {
+                toast.success('Registration successful');
+                router.push('/auth/login');
+            }
+        } catch (error) {
+            if (error instanceof Error && 'response' in error) {
+                const { detail } = (error as ApiError).response.data;
+                toast.error(detail);
+            } else {
+                toast.error('An unexpected error occurred');
+            }
+        }
     }
 
     return (

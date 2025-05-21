@@ -43,8 +43,6 @@ export default function Modal() {
         }
     }, []);
 
-    console.log('Modal render:', { isOpen, title });
-
     const handleConfirm = () => {
         if (onConfirm) {
             onConfirm();
@@ -76,6 +74,7 @@ export default function Modal() {
                             border: '1px solid #27272A',
                             cursor: 'pointer',
                             transition: 'all 0.3s ease',
+                            marginRight: '0.5rem',
                         }}
                         className="hover:bg-[#27272A]"
                     >
