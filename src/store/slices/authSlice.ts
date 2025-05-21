@@ -24,11 +24,11 @@ const authSlice = createSlice({
         login: (state, action: PayloadAction<{ id: string; email: string; first_name: string; last_name: string; role: string; token: string }>) => {
             state.isAuthenticated = true;
             state.user = action.payload;
-          },
-          logout: (state) => {
+        },
+        logout: (state) => {
             state.isAuthenticated = false;
             state.user = null;
-          },
+        },
     },
 });
 

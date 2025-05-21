@@ -1,27 +1,21 @@
 'use client';
 
-import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
 export default function Dashboard() {
-  const { isAuthenticated } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-    }
-  }, [isAuthenticated, router]);
-
-  if (!isAuthenticated) {
-    return null;
-  }
+  const { user } = useSelector((state: RootState) => state.auth);
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      {/* Contenido del dashboard */}
-    </div>
+    <ProtectedRoute>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+        <div>
+          <p>Welcome, {user?.first_name || 'User'}</p>
+          {/* Contenido del dashboard */}
+        </div>
+      </div>
+    </ProtectedRoute>
   );
 }

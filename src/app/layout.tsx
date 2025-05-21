@@ -1,5 +1,9 @@
+'use client';
+
 import './globals.css';
-import { ReduxProvider } from '@/providers/ReduxProvider';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from '@/store';
 import { Toaster } from 'sonner';
 
 export default function RootLayout({
@@ -9,12 +13,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full">
-      <ReduxProvider>
-        <body className="h-full overflow-hidden">
-          <Toaster richColors position="top-center" />
-          { children }
-        </body>
-      </ReduxProvider>
+      <body className="h-full overflow-hidden">
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <Toaster richColors position="top-center" />
+            { children }
+          </PersistGate>
+        </Provider>
+      </body>
     </html>
   )
 }

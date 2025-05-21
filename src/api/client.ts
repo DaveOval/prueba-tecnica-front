@@ -15,7 +15,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const state = store.getState();
-    const token  = state.auth?.user?.token;
+    const token = state.auth.user?.token;
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -32,10 +32,8 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-        // Dispatch logout action
       store.dispatch(logout());
-        // Redirect to login page
-      window.location.href = '/auth/login'; 
+      window.location.href = '/auth/login';
     }
     return Promise.reject(error);
   }
