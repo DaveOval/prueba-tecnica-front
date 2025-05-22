@@ -59,7 +59,7 @@ export default function DropZone() {
         onDrop,
         maxFiles: 1,
         accept: {
-            'image/*': ['.png', '.jpg', '.jpeg', '.gif']
+            'image/*': ['.png', '.jpg', '.jpeg']
         }
     });
 
