@@ -12,11 +12,12 @@ interface getImageResponse {
     message?: string;
 }
 
-export interface Image {
+export interface ImageInterface {
     id: string;
     original_filename: string;
     original_path: string;
     processed_path: string;
+    processed_filename: string | null;
     filter_name: string | null;  
     uploaded_at: string;
 }
@@ -54,8 +55,8 @@ export const imageService = {
         }
     },
 
-    getUserImages: async (): Promise<Image[]> => {
-        const response = await apiClient.get<Image[]>('/images/');
+    getUserImages: async (): Promise<ImageInterface[]> => {
+        const response = await apiClient.get<ImageInterface[]>('/images/');
         return response.data;
     }
 };

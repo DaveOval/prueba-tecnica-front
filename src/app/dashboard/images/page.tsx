@@ -2,41 +2,50 @@
 
 import { useEffect, useState } from 'react';
 import { imageService } from '@/api/services/images';
-import type { Image } from '@/api/services/images';
+import type { ImageInterface } from '@/api/services/images';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import Image from 'next/image';
+
+interface ImageWithData extends ImageInterface {
+    image_data?: string;
+}
 
 const Images = () => {
-    const [images, setImages] = useState<Image[]>([]);
-    const [imageData, setImageData] = useState<Record<string, string>>({});
+    const [images, setImages] = useState<ImageWithData[]>([]);
+    const [loadingImages, setLoadingImages] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchImages = async () => {
+            setLoadingImages(true);
             try {
                 const userImages = await imageService.getUserImages();
-                setImages(userImages);
-
-                const imageDataMap: Record<string, string> = {};
-                for (const image of userImages) {
-                    if (!image.id) continue;
+                
+                const imagesWithDataPromises = userImages.map(async (image) => {
+                    if (!image.id) return image;
                     try {
                         const data = await imageService.getImage(image.id);
-                        if (data.image_data) {
-                            imageDataMap[image.id] = data.image_data;
-                        }
+                        return { ...image, image_data: data.image_data };
                     } catch (err) {
                         console.error(`Error fetching image ${image.id}:`, err);
+                        return image; 
                     }
-                }
-                setImageData(imageDataMap);
+                });
+
+                const imagesWithData = await Promise.all(imagesWithDataPromises);
+                setImages(imagesWithData);
             } catch (err) {
                 console.error('Error fetching images:', err);
                 toast.error('Error loading images');
+            } finally {
+                setLoadingImages(false);
             }
         };
 
         fetchImages();
     }, []);
+
+    const imagesToDisplay = images.filter(image => image.image_data);
 
     const containerStyle: React.CSSProperties = {
         display: 'flex',
@@ -108,9 +117,10 @@ const Images = () => {
         fontSize: '1rem',
         fontWeight: '600',
         color: 'white',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
+        whiteSpace: 'normal',
+        overflowWrap: 'break-word',
+        textOverflow: 'initial',
+        overflow: 'visible',
         marginBottom: '0.5rem',
     };
 
@@ -126,8 +136,6 @@ const Images = () => {
     };
 
     const buttonStyle: React.CSSProperties = {
-        marginTop: '1rem',
-        width: '100%',
         backgroundColor: '#3b82f6',
         color: 'white',
         padding: '0.5rem 1rem',
@@ -138,16 +146,19 @@ const Images = () => {
         fontSize: '1rem',
         textAlign: 'center',
         textDecoration: 'none',
-        display: 'inline-block',
+        display: 'block',
+        flexGrow: 1,
+        flexBasis: '0',
+        minWidth: 'auto',
     };
-
-    const imagesToDisplay = images.filter(image => imageData[image.id]);
 
     return (
         <div style={containerStyle}>
             <h1 style={headingStyle}>Images</h1>
 
-            {imagesToDisplay.length === 0 ? (
+            {loadingImages ? (
+                <div style={noImagesStyle}>Loading images...</div>
+            ) : imagesToDisplay.length === 0 ? (
                 <div style={noImagesStyle}>No images available</div>
             ) : (
                 <div style={gridContainerStyle}>
@@ -158,10 +169,12 @@ const Images = () => {
                                 style={cardStyle}
                             >
                                 <div style={imageContainerStyle}>
-                                    <img 
-                                        src={imageData[image.id]} 
+                                    <Image
+                                        src={image.image_data!}
                                         alt={image.original_filename || 'Image'}
                                         style={imageStyle}
+                                        width={300}
+                                        height={200}
                                     />
                                 </div>
                                 <div style={contentStyle}>
@@ -179,12 +192,12 @@ const Images = () => {
                                         )}
                                     </div>
                                     <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-                                        <Link href={`/dashboard/editor?imageId=${image.id}`} passHref>
-                                            <button style={buttonStyle}>
-                                                View
-                                            </button>
+                                        
+                                        <Link href={`/dashboard/editor?imageId=${image.id}`} style={buttonStyle}>
+                                            View
                                         </Link>
                                         
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -194,6 +207,6 @@ const Images = () => {
             )}
         </div>
     );
-}
+};
 
 export default Images;

@@ -75,7 +75,7 @@ export default function Sidebar() {
                     >
                         <div className="flex flex-col gap-4">
                             <Link
-                                href={"dashboard/images"}
+                                href={"/dashboard/images"}
                                 className="flex items-center justify-around p-2 rounded-lg transition-all duration-300 hover:bg-[#27272A] hover:scale-105"
                             >
                                 <Image
