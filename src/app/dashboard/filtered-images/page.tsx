@@ -135,6 +135,15 @@ const FilteredImages = () => {
         minWidth: 'auto',
     };
 
+    const downloadImage = (imageData: string, filename: string) => {
+        const link = document.createElement('a');
+        link.href = imageData;
+        link.download = filename || 'image.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <div style={containerStyle}>
             <h1 style={headingStyle}>Filtered Images</h1>
@@ -174,10 +183,16 @@ const FilteredImages = () => {
                                             </p>
                                         )}
                                     </div>
-                                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
                                         <Link href={`/dashboard/editor?imageId=${image.id}`} style={buttonStyle}>
                                             View
                                         </Link>
+                                        <button 
+                                            onClick={() => downloadImage(image.image_data!, image.filename || 'image.png')}
+                                            style={{...buttonStyle, backgroundColor: '#10b981'}}
+                                        >
+                                            Download
+                                        </button>
                                     </div>
                                 </div>
                             </div>
