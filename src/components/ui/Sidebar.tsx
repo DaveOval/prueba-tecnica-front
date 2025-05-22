@@ -94,7 +94,30 @@ export default function Sidebar() {
                                         display: isSidebarOpen ? 'block' : 'none',
                                     }}
                                 >
-                                    Images
+                                    Original Images
+                                </p>
+                            </Link>
+                            <Link
+                                href={"/dashboard/filtered-images"}
+                                className="flex items-center justify-around p-2 rounded-lg transition-all duration-300 hover:bg-[#27272A] hover:scale-105"
+                            >
+                                <Image
+                                    src="/filters.svg"
+                                    alt="filtered images"
+                                    width={ 40 }
+                                    height={ 40 }
+                                    className="transition-all  duration-300"
+                                />
+                                <p 
+                                    style={{
+                                        color: '#ededee',
+                                        fontWeight: 'bold',
+                                        textDecoration: 'none !important',
+                                        textUnderlineOffset: 'none',
+                                        display: isSidebarOpen ? 'block' : 'none',
+                                    }}
+                                >
+                                    Filtered Images
                                 </p>
                             </Link>
                            {/*  <Link

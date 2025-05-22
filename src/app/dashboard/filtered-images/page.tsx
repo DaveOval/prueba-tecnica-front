@@ -7,17 +7,18 @@ import type { ImageInterface } from '@/api/services/images';
 import { toast } from 'sonner';
 import Link from 'next/link';
 
-const Images = () => {
-    const [images, setImages] = useState<ImageInterface[]>([] as ImageInterface[]);
+const FilteredImages = () => {
+    const [images, setImages] = useState<ImageInterface[]>([]);
     const [loadingImages, setLoadingImages] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchImages = async () => {
             setLoadingImages(true);
             try {
-                const userImages = await imageService.getOriginalImages();
+                const userImages = await imageService.getProcessedImages();
                 
                 setImages(userImages.images);
+
             } catch (err) {
                 console.error('Error fetching images:', err);
                 toast.error('Error loading images');
@@ -112,6 +113,11 @@ const Images = () => {
         marginBottom: '0.5rem',
     };
 
+    const filterStyle: React.CSSProperties = {
+        color: '#60a5fa',
+        fontSize: '0.875rem',
+    };
+
     const buttonStyle: React.CSSProperties = {
         backgroundColor: '#3b82f6',
         color: 'white',
@@ -131,22 +137,22 @@ const Images = () => {
 
     return (
         <div style={containerStyle}>
-            <h1 style={headingStyle}>Original Images</h1>
+            <h1 style={headingStyle}>Filtered Images</h1>
 
             {loadingImages ? (
                 <div style={noImagesStyle}>Loading images...</div>
             ) : images.length === 0 ? (
-                <div style={noImagesStyle}>No original images available</div>
+                <div style={noImagesStyle}>No filtered images available</div>
             ) : (
                 <div style={gridContainerStyle}>
                     <div style={gridStyle}>
-                        {images.map((image) => {
-                            return (
+                        {images.map((image) => (
                             <div 
                                 key={image.id} 
                                 style={cardStyle}
                             >
                                 <div style={imageContainerStyle}>
+                                
                                     <img
                                         src={image.image_data!}
                                         alt={image.filename || 'Image'}
@@ -154,13 +160,19 @@ const Images = () => {
                                     />
                                 </div>
                                 <div style={contentStyle}>
-                                    <div >
+                                    <div>
                                         <h2 style={titleStyle}>
                                             {image.filename || 'Untitled'}
                                         </h2>
                                         <p style={dateStyle}>
                                             {image.uploaded_at ? new Date(image.uploaded_at).toLocaleDateString() : 'No date'}
                                         </p>
+                                        {image.filter_name && (
+                                            <p style={filterStyle}>
+                                                Filter: {image.filter_name}
+                                                {image.filter_value && ` (${image.filter_value})`}
+                                            </p>
+                                        )}
                                     </div>
                                     <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
                                         <Link href={`/dashboard/editor?imageId=${image.id}`} style={buttonStyle}>
@@ -169,7 +181,7 @@ const Images = () => {
                                     </div>
                                 </div>
                             </div>
-                        );})}
+                        ))}
                     </div>
                 </div>
             )}
@@ -177,4 +189,4 @@ const Images = () => {
     );
 };
 
-export default Images;
+export default FilteredImages; 

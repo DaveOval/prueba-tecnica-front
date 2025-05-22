@@ -14,12 +14,19 @@ interface getImageResponse {
 
 export interface ImageInterface {
     id: string;
-    original_filename: string;
+    filename: string;
     original_path: string;
     processed_path: string;
     processed_filename: string | null;
     filter_name: string | null;  
-    uploaded_at: string;
+    filter_value?: string;
+    uploaded_at?: string;
+    is_processed?: boolean;
+    image_data?: string;
+}
+
+interface OriginalImagesResponse {
+    images: ImageInterface[];
 }
 
 export const imageService = {
@@ -55,8 +62,13 @@ export const imageService = {
         }
     },
 
-    getUserImages: async (): Promise<ImageInterface[]> => {
-        const response = await apiClient.get<ImageInterface[]>('/images/');
+    getOriginalImages: async (): Promise<OriginalImagesResponse> => {
+        const response = await apiClient.get<OriginalImagesResponse>('/images/original');
+        return response.data;
+    },
+
+    getProcessedImages: async (): Promise<OriginalImagesResponse> => {
+        const response = await apiClient.get<OriginalImagesResponse>('/images/processed');
         return response.data;
     }
 };
