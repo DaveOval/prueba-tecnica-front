@@ -1,4 +1,5 @@
 import apiClient from '../client';
+import { AxiosError } from 'axios';
 
 interface ImageResponse {
     message: string;
@@ -8,6 +9,7 @@ interface ImageResponse {
 interface getImageResponse {
     image_data: string;
     filename: string;
+    message?: string;
 }
 
 export const imageService = {
@@ -26,5 +28,20 @@ export const imageService = {
     getImage: async (imageId: string): Promise<getImageResponse> => {
         const response = await apiClient.get<getImageResponse>(`/images/${imageId}/serve`);
         return response.data;
-    }
+    },
+
+    applyFilter: async (imageId: string, filter: string): Promise<getImageResponse> => {
+        try {
+            const response = await apiClient.post<getImageResponse>(`/images/${imageId}/process`, {
+                filter_name: filter,
+            });
+            return response.data;
+        } catch (error) {
+            const axiosError = error as AxiosError;
+            if (axiosError.response?.status === 422) {
+                throw new Error('Invalid filter type. Please select a valid filter.');
+            }
+            throw error;
+        }
+    },
 };

@@ -6,6 +6,7 @@ import { imageService } from '@/api/services/images';
 import { useAuth } from '@/hooks/useAuth';
 import { AxiosError } from 'axios';
 import Image from 'next/image';
+import { toast } from 'sonner';
 
 const filters = [
     {
@@ -81,6 +82,27 @@ const Editor = () => {
         fetchImage();
     }, [imageId, user]);
 
+
+    const handleApplyFilter = async () => {
+        const filter = selectedFilter;
+        if (!filter) {
+            toast.error('Please select a filter to apply');
+            return;
+        }
+        try {
+            const response = await imageService.applyFilter(imageId!, filter);
+            if (response.message) {
+                toast.success(response.message);
+            } else {
+                setError('Invalid response format from server');
+            }
+        } catch (err) {
+            const error = err as Error;
+            console.error('Error details:', error);
+            toast.error(error.message || 'Error applying filter');
+        }
+    }
+
     if (!imageId) {
         return (
             <main className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] p-4 ">
@@ -132,6 +154,7 @@ const Editor = () => {
                     }}
                 >
                     <button
+                        type="button"
                         style={{
                             backgroundColor: '#3B82F6', 
                             color: 'white',
@@ -143,10 +166,10 @@ const Editor = () => {
                             marginRight: '8px',
                             transition: 'background-color 0.2s ease-in-out',
                         }}
-                        onClick={() => {
-                            // Handle filter application using selectedFilter state
-                            console.log('Applying filter:', selectedFilter);
-                        } }
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleApplyFilter();
+                        }}
                     >
                         Apply Filter
                     </button>
