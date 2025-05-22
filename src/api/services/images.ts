@@ -12,6 +12,15 @@ interface getImageResponse {
     message?: string;
 }
 
+export interface Image {
+    id: string;
+    original_filename: string;
+    original_path: string;
+    processed_path: string;
+    filter_name: string | null;  
+    uploaded_at: string;
+}
+
 export const imageService = {
     uploadImage: async (file: File): Promise<ImageResponse> => {
         const formData = new FormData();
@@ -44,4 +53,9 @@ export const imageService = {
             throw error;
         }
     },
+
+    getUserImages: async (): Promise<Image[]> => {
+        const response = await apiClient.get<Image[]>('/images/');
+        return response.data;
+    }
 };

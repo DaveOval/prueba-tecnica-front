@@ -75,7 +75,7 @@ export default function Sidebar() {
                     >
                         <div className="flex flex-col gap-4">
                             <Link
-                                href={"/my-images"}
+                                href={"dashboard/images"}
                                 className="flex items-center justify-around p-2 rounded-lg transition-all duration-300 hover:bg-[#27272A] hover:scale-105"
                             >
                                 <Image
@@ -97,7 +97,7 @@ export default function Sidebar() {
                                     Images
                                 </p>
                             </Link>
-                            <Link
+                           {/*  <Link
                                 href={"/dashboard"}
                                 className="flex items-center justify-around p-2 rounded-lg transition-all duration-300 hover:bg-[#27272A] hover:scale-105"
                             >
@@ -119,7 +119,7 @@ export default function Sidebar() {
                                 >
                                     Upload
                                 </p>
-                            </Link>
+                            </Link> */}
                         </div>
                         <button
                             className="flex items-center justify-around mt-auto mb-4 p-2 rounded-lg transition-all duration-300 hover:bg-[#27272A] hover:scale-105"
