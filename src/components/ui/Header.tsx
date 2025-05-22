@@ -33,14 +33,14 @@ export default function Header() {
                 {
                     isSidebarOpen ? (
                         <Image 
-                            src="/menu.svg" 
+                            src="/close.svg" 
                             alt="menu" 
                             width={30} 
                             height={30}  
                         />
                     ) : (
                         <Image 
-                            src="/close.svg" 
+                            src="/menu.svg" 
                             alt="menu" 
                             width={30} 
                             height={30} 

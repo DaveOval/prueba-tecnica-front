@@ -1,13 +1,27 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
+import { useDropzone } from 'react-dropzone';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { toast } from 'sonner';
+import { imageService } from '@/api/services/images';
+import { useRouter } from 'next/navigation';
+
+interface ApiError {
+    response?: {
+        data?: {
+            detail: string;
+        }
+    }
+}
 
 export default function DropZone() {
+    const router = useRouter();
     const [isHovered, setIsHovered] = useState(false);
     const [preview, setPreview] = useState<string | null>(null);
     const [file, setFile] = useState<File | null>(null);
+    const [isUploading, setIsUploading] = useState(false);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (acceptedFiles.length > 0) {
@@ -19,6 +33,23 @@ export default function DropZone() {
             setPreview(previewUrl);
         }
     }, []);
+
+    const handleUpload = async () => {
+        if (!file) return;
+
+        try {
+            setIsUploading(true);
+            const response = await imageService.uploadImage(file);
+            toast.success(response.message);
+            // Redirect to editor page with image ID
+            router.push(`/dashboard/editor?imageId=${response.image_id}`);
+        } catch (error) {
+            const apiError = error as ApiError;
+            toast.error(apiError.response?.data?.detail || 'Error al subir la imagen');
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     const { 
         getRootProps, 
@@ -80,6 +111,19 @@ export default function DropZone() {
         gap: '0.5rem',
     };
 
+    const buttonStyle: React.CSSProperties = {
+        backgroundColor: '#5472E4',
+        color: '#ededee',
+        padding: '0.5rem 1rem',
+        borderRadius: '0.5rem',
+        border: 'none',
+        cursor: 'pointer',
+        marginTop: '1rem',
+        transition: 'all 0.3s ease',
+        opacity: isUploading ? 0.7 : 1,
+        pointerEvents: isUploading ? 'none' : 'auto',
+    };
+
     return (
         <div
             {...getRootProps()}
@@ -92,6 +136,13 @@ export default function DropZone() {
                 {isDragActive ? 'Drop the image here...' : 'Drag and drop an image here, or click to select one'}
             </p>
 
+            {!preview && (
+                <DotLottieReact
+                    src="https://lottie.host/326f91e9-3387-4e91-9d21-7c0cb27d1cd6/adpiAPPwfH.lottie"
+                    autoplay
+                />
+            )}
+
             {preview && (
                 <>
                     <div style={previewStyle}>
@@ -103,11 +154,22 @@ export default function DropZone() {
                             style={{ borderRadius: '0.5rem' }}
                         />
                     </div>
+                    
                     {file && (
                         <div style={fileInfoStyle}>
                             <span>📄</span> {file.name}
                         </div>
                     )}
+                    <button 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleUpload();
+                        }}
+                        style={buttonStyle}
+                        disabled={isUploading}
+                    >
+                        {isUploading ? 'Uploading...' : 'Upload Image'}
+                    </button>
                 </>
             )}
         </div>

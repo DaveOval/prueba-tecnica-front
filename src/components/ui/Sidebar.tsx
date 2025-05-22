@@ -29,7 +29,7 @@ export default function Sidebar() {
         <aside 
             className="flex h-full min-h-screen flex-col items-center justify-between gap-4 overflow-y-auto  p-4 transition-all duration-300 py-4"
             style={{
-                width: !isSidebarOpen ? '200px' : '70px',
+                width: isSidebarOpen ? '200px' : '70px',
             }}
         >
             <div className="flex flex-col items-center justify-center gap-4 w-full ">
@@ -46,8 +46,8 @@ export default function Sidebar() {
                     <Image
                         src="/logo.svg" 
                         alt="logo" 
-                        width={ !isSidebarOpen ? 50 : 40 } 
-                        height={ !isSidebarOpen ? 50 : 40 }
+                        width={ isSidebarOpen ? 50 : 40 } 
+                        height={ isSidebarOpen ? 50 : 40 }
                     />
                 </Link>
                 <section
@@ -91,7 +91,7 @@ export default function Sidebar() {
                                         fontWeight: 'bold',
                                         textDecoration: 'none !important',
                                         textUnderlineOffset: 'none',
-                                        display: !isSidebarOpen ? 'block' : 'none',
+                                        display: isSidebarOpen ? 'block' : 'none',
                                     }}
                                 >
                                     Images
@@ -114,7 +114,7 @@ export default function Sidebar() {
                                         fontWeight: 'bold',
                                         textDecoration: 'none !important',
                                         textUnderlineOffset: 'none',
-                                        display: !isSidebarOpen ? 'block' : 'none',
+                                        display: isSidebarOpen ? 'block' : 'none',
                                     }}
                                 >
                                     Upload
@@ -144,7 +144,7 @@ export default function Sidebar() {
                                     fontWeight: 'bold',
                                     textDecoration: 'none !important',
                                     textUnderlineOffset: 'none',
-                                    display: !isSidebarOpen ? 'block' : 'none',
+                                    display: isSidebarOpen ? 'block' : 'none',
                                 }}
                             >
                                 Logout
