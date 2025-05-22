@@ -49,25 +49,25 @@ const Editor = () => {
 
     if (error) {
         return (
-            <main className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] p-4 ]">
+            <main className="flex flex-col items-center justify-center min-h-[calc(100vh - 64px)] p-4 ]">
                 <p className="text-white">{error}</p>
             </main>
         );
     }
 
     return (
-        <main className="flex flex-col items-center justify-start min-h-[calc(90vh-64px)] p-4  overflow-y-auto">
-            <div className="flex w-full max-w-6xl gap-4">
+        <main className="flex flex-col items-center justify-start min-h-[calc(100vh-64px)] p-4 w-full">
+            <div className="flex flex-col w-full max-w-6xl gap-4 flex-grow h-full">
                 {/* Image Section */}
-                <div className="flex-1 flex justify-center items-start relative">
+                <div className="flex justify-center items-start relative h-[calc(100vh-212px)]">
                     {imageData ? (
                         <Image 
                             src={imageData} 
                             alt="Uploaded image" 
                             width={0}
                             height={0}
-                            sizes="100vw"
-                            className="w-full h-auto rounded-lg shadow-lg object-contain"
+                            sizes="90vw"
+                            className="w-auto h-full object-contain"
                         />
                     ) : (
                         <p className="text-white">Loading image...</p>
@@ -75,10 +75,10 @@ const Editor = () => {
                 </div>
 
                 {/* Filter Panel */}
-                <div className="w-72 bg-[#27272A] rounded-lg p-4 flex-shrink-0">
+                <div className="flex-shrink-0 w-full bg-[#27272A] rounded-lg p-4 h-[100px]">
                     <h2 className="text-white text-xl mb-4">Filters</h2>
                     {/* Filter controls */}
-                    <p className="text-gray-400">.</p>
+                    <p className="text-gray-400">Filtros xd</p>
                 </div>
             </div>
         </main>
