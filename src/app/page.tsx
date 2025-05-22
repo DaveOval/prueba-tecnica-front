@@ -1,18 +1,22 @@
-import Link from 'next/link';
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 
 const Home = () => {
-  return (
-    <main>
-      <h1>Hello World</h1>
-      <nav>
-        <Link href="/login">Login</Link>
-        <br />
-        <Link href="/register">Register</Link>
-        <br />
-        <Link href="/dashboard">Dashboard</Link>
-      </nav>
-    </main>
-  );
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace('/dashboard');
+    } else {
+      router.replace('/auth/login');
+    }
+  }, [isAuthenticated, router]);
+
+  return null;
 };
 
 export default Home;
