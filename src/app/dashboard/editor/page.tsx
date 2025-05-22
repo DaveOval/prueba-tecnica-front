@@ -7,11 +7,53 @@ import { useAuth } from '@/hooks/useAuth';
 import { AxiosError } from 'axios';
 import Image from 'next/image';
 
+const filters = [
+    {
+        name: 'Grayscale',
+        description: 'Apply a grayscale filter to the image.',
+        value: 'grayscale',
+        img: '/grayscale.webp',
+    },
+    {
+        name: 'Blur',
+        description: 'Apply a blur effect to the image.',
+        value: 'blur',
+        img: '/blur.webp',
+    },
+    {
+        name: 'Thumbnail',
+        description: 'Create a thumbnail version of the image.',
+        value: 'thumbnail',
+        img: '/thumbnail.webp',
+    },
+    {
+        name: 'Sepia',
+        description: 'Apply a sepia tone to the image.',
+        value: 'sepia',
+        img: '/sepia.webp',
+    },
+    {
+        name: 'Invert',
+        description: 'Invert the colors of the image.',
+        value: 'invert',
+        img: '/invert.webp',
+    },
+    {
+        name: 'Brightness',
+        description: 'Adjust the brightness of the image.',
+        value: 'brightness',
+        img: '/brightness.webp',
+    },
+
+]
+
 const Editor = () => {
     const searchParams = useSearchParams();
     const imageId = searchParams.get('imageId');
     const [imageData, setImageData] = useState<string>('');
     const [error, setError] = useState<string>('');
+    const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+    const [hoveredFilter, setHoveredFilter] = useState<string | null>(null);
     const { user } = useAuth();
 
     useEffect(() => {
@@ -75,10 +117,85 @@ const Editor = () => {
                 </div>
 
                 {/* Filter Panel */}
-                <div className="flex-shrink-0 w-full bg-[#27272A] rounded-lg p-4 h-[100px]">
-                    <h2 className="text-white text-xl mb-4">Filters</h2>
-                    {/* Filter controls */}
-                    <p className="text-gray-400">Filtros xd</p>
+                <div 
+                    style={{
+                        flexShrink: 0,
+                        width: '100%',
+                        backgroundColor: '#27272A',
+                        borderRadius: '0.5rem',
+                        padding: '1rem',
+                        height: '100px',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: '1rem',
+                        overflowX: 'auto',
+                    }}
+                >
+                    <button
+                        style={{
+                            backgroundColor: '#3B82F6', 
+                            color: 'white',
+                            fontWeight: 'bold',
+                            borderRadius: '8px',
+                            border: 'none',
+                            padding: '8px 16px',
+                            cursor: 'pointer',
+                            marginRight: '8px',
+                            transition: 'background-color 0.2s ease-in-out',
+                        }}
+                        onClick={() => {
+                            // Handle filter application using selectedFilter state
+                            console.log('Applying filter:', selectedFilter);
+                        } }
+                    >
+                        Apply Filter
+                    </button>
+                    
+                    {/* Filter cards */}
+                    <div style={{ display: 'flex', gap: '1rem', overflow: 'hidden' }}>
+                        {filters.map(filter => (
+                            <div
+                                key={filter.value}
+                                style={{
+                                    flexShrink: 0,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center', 
+                                    padding: '0.5rem', 
+                                    borderRadius: '0.5rem', 
+                                    borderWidth: '2px', 
+                                    borderStyle: 'solid',
+                                    cursor: 'pointer',
+                                    width: '100px', 
+                                    height: '100px', 
+                                    borderColor: selectedFilter === filter.value ? '#3b82f6' : 'transparent', 
+                                    backgroundColor: hoveredFilter === filter.value ? '#19191B' : selectedFilter === filter.value ? 'rgba(25, 25, 27, 0.8)' : '#19191B', 
+                                    backgroundImage: hoveredFilter === filter.value ? 'none' : `url(${filter.img})`, 
+                                    backgroundSize: 'cover', 
+                                    backgroundPosition: 'center', 
+                                    backgroundRepeat: 'no-repeat', 
+                                    position: 'relative', 
+                                    overflow: 'hidden', 
+                                    transition: 'background-color 0.3s ease, background-image 0.3s ease', 
+                                    boxSizing: 'border-box', 
+                                    backgroundClip: 'padding-box', 
+                                }}
+                                onClick={() => setSelectedFilter(filter.value)}
+                                onMouseEnter={() => setHoveredFilter(filter.value)}
+                                onMouseLeave={() => setHoveredFilter(null)}
+                                title={filter.description} 
+                            >
+                                {/* Text overlaid on background image */}
+                                {hoveredFilter !== filter.value && (
+                                    <p style={{ color: '#ededee', fontSize: '0.75rem', textAlign: 'center', zIndex: 1, textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>{filter.name}</p>
+                                )}
+                                {hoveredFilter === filter.value && (
+                                    <p style={{ color: '#9ca3af', fontSize: '0.65rem', textAlign: 'center', zIndex: 1, textShadow: '1px 1px 2px rgba(0,0,0,0.5)', padding: '0.5rem' }}>{filter.description}</p>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </main>
