@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { imageService } from '@/api/services/images';
 import type { ImageInterface } from '@/api/services/images';
 import { toast } from 'sonner';
-import Link from 'next/link';
+// import Link from 'next/link';
 
 const FilteredImages = () => {
     const [images, setImages] = useState<ImageInterface[]>([]);
@@ -184,9 +184,9 @@ const FilteredImages = () => {
                                         )}
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '1rem' }}>
-                                        <Link href={`/dashboard/editor?imageId=${image.id}`} style={buttonStyle}>
+                                        {/* <Link href={`/dashboard/editor?imageId=${image.id}`} style={buttonStyle}>
                                             View
-                                        </Link>
+                                        </Link> */}
                                         <button 
                                             onClick={() => downloadImage(image.image_data!, image.filename || 'image.png')}
                                             style={{...buttonStyle, backgroundColor: '#10b981'}}
