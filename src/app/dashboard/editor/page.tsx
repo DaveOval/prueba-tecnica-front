@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { imageService } from '@/api/services/images';
 import { useAuth } from '@/hooks/useAuth';
@@ -50,6 +50,7 @@ const filters = [
 
 const Editor = () => {
     const searchParams = useSearchParams();
+    const router = useRouter();
     const imageId = searchParams.get('imageId');
     const [imageData, setImageData] = useState<string>('');
     const [error, setError] = useState<string>('');
@@ -65,6 +66,7 @@ const Editor = () => {
                 const response = await imageService.getImage(imageId);
                 if (response.image_data) {
                     setImageData(response.image_data);
+                    
                 } else {
                     setError('Invalid response format from server');
                 }
@@ -93,6 +95,7 @@ const Editor = () => {
             const response = await imageService.applyFilter(imageId!, filter);
             if (response.message) {
                 toast.success(response.message);
+                router.push('/dashboard/filtered-images');
             } else {
                 setError('Invalid response format from server');
             }
