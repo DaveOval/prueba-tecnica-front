@@ -25,7 +25,7 @@ Esta es una aplicación web desarrollada como prueba técnica para ImgBest. La a
 
 1. Clona el repositorio:
 ```bash
-git clone [https://github.com/DaveOval/prueba-tecnica-front]
+git clone https://github.com/DaveOval/prueba-tecnica-front
 cd prueba-tecnica-front
 ```
 
@@ -48,13 +48,13 @@ npm install
 npm run dev
 ```
 
-## 🌐Variables de Entorno
+## Variables de Entorno
 
 La aplicación requiere las siguientes variables de entorno:
 
 - `NEXT_PUBLIC_API_URL`: URL de la API (por defecto: http://localhost:8000/)
 
-## 🛠️ Scripts Disponibles
+## Scripts Disponibles
 
 - `npm run dev` - Inicia el servidor de desarrollo
 - `npm run build` - Construye la aplicación para producción
